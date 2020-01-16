@@ -2,38 +2,27 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
-const App = (props) => {
-  const [count, setCount] = useState(props.count);
-  const [text, setText] = useState('test');
+const NoteApp = () => {
 
-  const increment = () => {
-    setCount(count + 1);
-  };
-
-  const decrement = () => {
-    setCount(count - 1);
-  };
-
-  const reset = () => {
-    setCount(props.count);
-  };
+  const [notes, setNotes] = useState([]);
+  const [title, setTitle] = useState('');
 
   return (
     <div>
-      <button onClick={increment}>+1</button>
-      <button onClick={decrement}>-1</button>
-      <button onClick={reset}>reset</button>
-      <p>{text || 'count'} is: {count}</p>
-      <input value={text} onChange={(e) => setText(e.target.value)}></input>
+      <h1>Notes</h1>
+      <p>Add Note</p>
+      <p>{title}</p>
+      <form>
+        <input value={title} onChange={(e) => {setTitle(e.target.value)}}></input>
+      </form>
     </div>
   )
 }
 
-App.defaultProps = {
-  count: 0
+NoteApp.defaultProps = {
 };
 
-ReactDOM.render(<App count={5} />, document.getElementById('root'));
+ReactDOM.render(<NoteApp />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
