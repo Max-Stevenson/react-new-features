@@ -1,31 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
-const NoteApp = () => {
+const notesReducer = (state, action) => {
+  switch (action.type) {
+    case 'POPULATE_NOTES':
+      return action.notes;
+    case 'ADD_NOTE':
+      return [
+        ...state,
+        { title: action.title, body: action.body }
+      ];
+    case 'REMOVE_NOTE':
+      return state.filter((note) => note.title !== action.title);
+    default:
+      return state;
+  };
+};
 
-  const [notes, setNotes] = useState([]);
+const NoteApp = () => {
+  // const [notes, setNotes] = useState([]);
+  const [notes, notesDispatch] = useReducer(notesReducer, []);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   const addNote = (event) => {
     event.preventDefault();
-    setNotes([
-      ...notes,
-      { title, body }
-    ]);
+    notesDispatch({ type: 'ADD_NOTE', title, body });
+    // setNotes([
+    //   ...notes,
+    //   { title, body }
+    // ]);
     setTitle('');
     setBody('');
   };
 
   const removeNote = (title) => {
-    setNotes(notes.filter((note) => note.title !== title));
+    // setNotes(notes.filter((note) => note.title !== title));
+    notesDispatch({type: 'REMOVE_NOTE', title})
   };
 
   useEffect(() => {
-    const notesData = JSON.parse(localStorage.getItem('notes'));
-    if (notesData) {
-      setNotes(notesData);
+    const notes = JSON.parse(localStorage.getItem('notes'));
+    if (notes) {
+      notesDispatch({ type: 'POPULATE_NOTES', notes });
+      // setNotes(notesData);
     };
   }, []);
 
@@ -50,6 +69,13 @@ const NoteApp = () => {
 }
 
 const Note = ({ note, removeNote }) => {
+  // useEffect(() => {
+
+  //   return () => {
+
+  //   }
+  // }, []);
+
   return (
     <div key={note.title}>
       <h3>{note.title}</h3>
@@ -58,45 +84,6 @@ const Note = ({ note, removeNote }) => {
     </div>
   );
 };
-
-// const CounterApp = (props) => {
-//   const [count, setCount] = useState(props.count);
-//   const [text, setText] = useState('test');
-
-//   useEffect(() => {
-//     document.title = count;
-//   }, [count]);
-
-//   useEffect(() => {
-//     console.log('run once');
-//   }, []);
-
-//   const increment = () => {
-//     setCount(count + 1);
-//   };
-
-//   const decrement = () => {
-//     setCount(count - 1);
-//   };
-
-//   const reset = () => {
-//     setCount(props.count);
-//   };
-
-//   return (
-//     <div>
-//       <button onClick={increment}>+1</button>
-//       <button onClick={decrement}>-1</button>
-//       <button onClick={reset}>reset</button>
-//       <p>{text || 'count'} is: {count}</p>
-//       <input value={text} onChange={(e) => setText(e.target.value)}></input>
-//     </div>
-//   );
-// };
-
-// CounterApp.defaultProps = {
-//   count: 0
-// };
 
 // NoteApp.defaultProps = {
 // };
