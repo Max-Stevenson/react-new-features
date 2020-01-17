@@ -8,10 +8,6 @@ import NotesContext from '../context/notes-context';
 const NoteApp = () => {
   const [notes, notesDispatch] = useReducer(notesReducer, []);
 
-  const removeNote = (title) => {
-    notesDispatch({ type: 'REMOVE_NOTE', title })
-  };
-
   useEffect(() => {
     const notes = JSON.parse(localStorage.getItem('notes'));
     if (notes) {
@@ -26,8 +22,8 @@ const NoteApp = () => {
   return (
     <NotesContext.Provider value={{ notes, notesDispatch }}>
       <h1>Notes</h1>
-      <NoteList removeNote={removeNote} />
-      <AddNoteForm notesDispatch={notesDispatch} />
+      <NoteList/>
+      <AddNoteForm/>
     </NotesContext.Provider>
   )
 }
