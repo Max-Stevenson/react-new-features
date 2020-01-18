@@ -1,8 +1,10 @@
 import React, { useState, useContext } from 'react';
 import NotesContext from '../context/notes-context';
+import useMousePosition from '../hooks/useMousePosition';
 
 const AddNoteForm = () => {
   const { notesDispatch } = useContext(NotesContext);
+  const mousePosition = useMousePosition();
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -16,7 +18,7 @@ const AddNoteForm = () => {
 
   return (
     <div>
-      <p>Add Note</p>
+      <p>Add Note {mousePosition.x} {mousePosition.y} </p>
       <form onSubmit={addNote}>
         <input value={title} onChange={(e) => { setTitle(e.target.value) }}></input>
         <textarea value={body} onChange={(e) => { setBody(e.target.value) }}></textarea>
